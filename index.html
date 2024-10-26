@@ -9,32 +9,34 @@
 <body>
     <div id="divElements" class="content">
         <p id="velI">Velocidad Inicial: </p>
-        <p id="dis">Distancia Recorrida en X: </p>
         <p id="yF">Posición del Impacto en Y: </p>
+        <p id="xF">Posición del Impacto en X: </p>
+        <p id="t">Tiempo de Vuelo del Proyectil: </p>
     </div>
     <div id="inputs" class="content">
         Ingrese la Altura Inicial del Objeto:
-        <input type="number" id="alturaO" min="1" value="40">
+        <input type="number" id="alturaO" min="1" value="80">
         <br>
         Ingrese la Altura Inicial del Proyectil:
-        <input type="number" id="alturaP" min="0" value="40">
+        <input type="number" id="alturaP" min="0" value="0">
         <br>
         Ingrese el Ángulo para disparar el proyectil:
-        <input type="number" id="anguloP" min="1" value="3">
-        <br>
-        Ingrese el tiempo de simulación (s):
-        <input type="number" id="tiempo" min="0" step="0.1" value="2">
-        <br>
+        <input type="number" id="anguloP" min="1" value="25">
+        <br><br>
         <center>
-            <button id="calcular">Calcular y Simular</button>
+            <button id="calcular">Calcular y Simular</button><br>
+            Velocidad de Animación:
             <input type="number" step="0.01", id="velocidad" value="0.05" min="0.01">
         </center>
     </div>
-    <canvas id="canvas" width="800" height="300"></canvas>
-    <script src="./js/ecuaciones.js"></script>
-    <script src="./js/elementos.js"></script>
+    <div class="clearfix"></div>
+    <div>
+        <canvas id="canvas" width="1010" height="430"></canvas>
+        <script src="./js/ecuaciones.js"></script>
+        <script src="./js/elementos.js"></script>
+    </div>
     <script>
-        agregarEventos(calcularAlturaImpacto, "calcular", "alturaP", "anguloP", "tiempo", "alturaO");
+        agregarEventos(calcularAlturaImpacto, "calcular", "alturaP", "anguloP", "alturaO");
     </script>
 </body>
 </html>

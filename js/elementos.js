@@ -11,7 +11,6 @@ function habilitarInput(id){
 }
 
 function deshabilitarInputs(){
-    deshabilitarInput("tiempo");
     deshabilitarInput("anguloP");
     deshabilitarInput("alturaO");
     deshabilitarInput("alturaP");
@@ -20,7 +19,6 @@ function deshabilitarInputs(){
 }
 
 function habilitarInputs(){
-    habilitarInput("tiempo");
     habilitarInput("anguloP");
     habilitarInput("alturaO");
     habilitarInput("alturaP");
@@ -30,11 +28,10 @@ function habilitarInputs(){
 
 function agregarEventos(calcular, button, ...ids) {
     document.getElementById(button).addEventListener('click', () => {
-        let tiempo = obtenerDatosInput("tiempo");
         let angulo = obtenerDatosInput("anguloP");
         let yObjeto = obtenerDatosInput("alturaO");
         let yProyectil = obtenerDatosInput("alturaP");
-        let resultado = calcular(yObjeto, angulo, tiempo, yProyectil);
+        let resultado = calcular(yObjeto, angulo, yProyectil);
         mostrarResultado(resultado);
         deshabilitarInputs();
         simularMovimiento(resultado.v0p, angulo, yProyectil, yObjeto, resultado.xF);
@@ -42,11 +39,10 @@ function agregarEventos(calcular, button, ...ids) {
 
     ids.forEach(item => {
         document.getElementById(item).addEventListener('change', () => {
-            let tiempo = obtenerDatosInput("tiempo");
             let angulo = obtenerDatosInput("anguloP");
             let yObjeto = obtenerDatosInput("alturaO");
             let yProyectil = obtenerDatosInput("alturaP");
-            let resultado = calcular(yObjeto, angulo, tiempo, yProyectil);
+            let resultado = calcular(yObjeto, angulo, yProyectil);
             mostrarResultado(resultado);
             deshabilitarInputs();
             simularMovimiento(resultado.v0p, angulo, yProyectil, yObjeto, resultado.xF);
@@ -56,11 +52,13 @@ function agregarEventos(calcular, button, ...ids) {
 
 function mostrarResultado(resultado) {
     document.getElementById("velI").textContent = `Velocidad Inicial: ${resultado.v0p.toFixed(2)} m/s`;
-    document.getElementById("dis").textContent = `Distancia Recorrida en X: ${resultado.xF.toFixed(2)} m`;
     document.getElementById("yF").textContent = `Posición del Impacto en Y: ${resultado.yF.toFixed(2)} m`;
+    document.getElementById("xF").textContent = `Posición del Impacto en Y: ${resultado.xF.toFixed(2)} m`;
+    document.getElementById("t").textContent = `Tiempo de Vuelo: ${resultado.t.toFixed(2)} s`;
 }
 
 function simularMovimiento(v0, angulo, alturaInicial, alturaObjeto, distancia) {
+    console.log();
     let canvas = document.getElementById("canvas");
     let ctx = canvas.getContext("2d");
     let t = 0;
@@ -68,7 +66,6 @@ function simularMovimiento(v0, angulo, alturaInicial, alturaObjeto, distancia) {
     let objetoEnElSuelo = false;
 
     let animar = () => {
-        let y0Proyectil = canvas.height - alturaInicial;
         let y0Objeto = canvas.height  - alturaObjeto;
         let dt = parseFloat(document.getElementById("velocidad").value);
         let g = 9.81;
@@ -77,10 +74,18 @@ function simularMovimiento(v0, angulo, alturaInicial, alturaObjeto, distancia) {
         ctx.clearRect(0, 0, canvas.width, canvas.height);
         t += dt;
 
-        let xProyectil = 10 + v0 * t * cos(convertirGradosRadianes(angulo));
-        let yProyectil = y0Proyectil - (v0 * t * sen(convertirGradosRadianes(angulo)) - (0.5 * g * t * t));
-
+        let xProyectil = movimientoXParabolico(0, v0, angulo, t);
+        let yProyectil = canvas.height-movimientoYParabólico(alturaInicial, v0, angulo, t);
         let yCaidaObjeto = y0Objeto + (0.5 * g * t * t);
+
+        let distanciaEntreCentros = Math.sqrt(
+            Math.pow(xProyectil - (distancia + 10), 2) + Math.pow(yProyectil - yCaidaObjeto, 2)
+        );
+
+        if (!colisionado && distanciaEntreCentros <= (5)) {
+            colisionado = true;
+            ctx.fillText("¡Colisión!", xProyectil, yProyectil - 10);
+        }
 
         ctx.beginPath();
         ctx.arc(xProyectil, yProyectil, radio, 0, Math.PI * 2);
@@ -89,24 +94,16 @@ function simularMovimiento(v0, angulo, alturaInicial, alturaObjeto, distancia) {
         ctx.closePath();
 
         ctx.beginPath();
-        ctx.arc(distancia + 10, yCaidaObjeto, radio, 0, Math.PI * 2);
+        ctx.arc(distancia, yCaidaObjeto, radio, 0, Math.PI * 2);
         ctx.fillStyle = "red";
         ctx.fill();
         ctx.closePath();
-
-        let distanciaEntreCentros = Math.sqrt(
-            Math.pow(xProyectil - (distancia + 10), 2) + Math.pow(yProyectil - yCaidaObjeto, 2)
-        );
 
         if (!objetoEnElSuelo && yCaidaObjeto >= canvas.height) {
             objetoEnElSuelo = true;
             ctx.fillText("¡El objeto ha tocado el suelo!", distancia, canvas.height - 10);
         }
-        console.log(xProyectil + " - " + yProyectil);
-        if (!colisionado && distanciaEntreCentros <= (5)) {
-            colisionado = true;
-            ctx.fillText("¡Colisión!", xProyectil, yProyectil - 10);
-        }
+        
         
         if (!colisionado && !objetoEnElSuelo) {
             requestAnimationFrame(animar);

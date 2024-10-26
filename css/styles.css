@@ -1,11 +1,22 @@
 body{
     font-family: Arial;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
+}
+
+.content{
+    text-align: center;
+    width: 45%;
+    float: left;
 }
 
 #canvas {
     border: 1px solid black;
-    margin-top: 20px;
+}
+
+.clearfix{
+    clear: both;
+}
+
+.animacion{
+    width: 100%;
+    border: 1px solid black;
 }
