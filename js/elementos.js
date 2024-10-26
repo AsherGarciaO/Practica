@@ -1,4 +1,5 @@
 function obtenerDatosInput(id) {
+    console.log(id);
     return parseFloat(document.getElementById(id).value);
 }
 
@@ -15,7 +16,6 @@ function deshabilitarInputs(){
     deshabilitarInput("alturaO");
     deshabilitarInput("alturaP");
     deshabilitarInput("calcular");
-    deshabilitarInput("alturaP");
 }
 
 function habilitarInputs(){
@@ -23,7 +23,6 @@ function habilitarInputs(){
     habilitarInput("alturaO");
     habilitarInput("alturaP");
     habilitarInput("calcular");
-    habilitarInput("alturaP");
 }
 
 function agregarEventos(calcular, button, ...ids) {
