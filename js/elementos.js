@@ -33,6 +33,7 @@ function agregarEventos(calcular, button, ...ids) {
         let resultado = calcular(yObjeto, angulo, yProyectil);
         mostrarResultado(resultado);
         deshabilitarInputs();
+
         simularMovimiento(resultado.v0p, angulo, yProyectil, yObjeto, resultado.xF);
     });
 
@@ -44,6 +45,7 @@ function agregarEventos(calcular, button, ...ids) {
             let resultado = calcular(yObjeto, angulo, yProyectil);
             mostrarResultado(resultado);
             deshabilitarInputs();
+            
             simularMovimiento(resultado.v0p, angulo, yProyectil, yObjeto, resultado.xF);
         });
     });

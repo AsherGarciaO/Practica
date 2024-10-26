@@ -7,7 +7,7 @@ function calcularAlturaImpacto(yIObjeto, grados, yIProyectil = 0) {
     return {v0p: vIProyectil, xF: distanciaX, yF: posicionImpactoY, t: tiempo};
 }
 
-// Funciones Extra
+// Funciones Extra 
 function potencia(base, exponente){
     return Math.pow(base, exponente);
 }
