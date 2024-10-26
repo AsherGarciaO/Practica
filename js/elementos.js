@@ -1,5 +1,4 @@
 function obtenerDatosInput(id) {
-    console.log(id);
     return parseFloat(document.getElementById(id).value);
 }
 
@@ -45,7 +44,7 @@ function agregarEventos(calcular, button, ...ids) {
             let resultado = calcular(yObjeto, angulo, yProyectil);
             mostrarResultado(resultado);
             deshabilitarInputs();
-            
+
             simularMovimiento(resultado.v0p, angulo, yProyectil, yObjeto, resultado.xF);
         });
     });
